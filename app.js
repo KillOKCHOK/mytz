@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var swaggerJsDoc = require('swagger-jsdoc');
+var swaggerUI = require('swagger-ui-express');
 
 var  logindao = require('./db/logindao');
 var  user_roledao = require('./db/user_roledao');
@@ -17,7 +19,15 @@ require('dotenv').config()
 const authenticateToken = require('./security/jwtmiddleware');
 var app = express();
 
+const swaggerOptions = {
+  swaggerDefinition:{
+    title:'Library API',
+    version:'1.0.0'
+  },
+  apis:['app.js','./routes/*.js']
+}
 
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 app.use(logger('dev'));
 app.use(express.json());
@@ -26,12 +36,39 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
+/**
+ * @swagger
+ * /registration:
+ *  post:
+ *    description: create new account
+ *    parameters:
+ *    - name: email
+ *      description: User's email
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: kitty@mail.com
+ *    - name: password
+ *      description: Password
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: root
+ *    responses:
+ *      200:
+ *        description : return new user ID
+ *      500:
+ *        description : Internal Server error
+ */
 app.use('/registration', registrationRouter);
 app.use('/login', loginRouter);
 app.use('/changepassword', authenticateToken, updatepwdRouter);
 app.use('/users', authenticateToken, usersRouter);
 app.use('/roles', authenticateToken, roleRouter);
+app.use('/swagger', swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+/**
 
+ */
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

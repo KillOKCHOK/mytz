@@ -5,9 +5,32 @@ var  user_roledao = require('../db/user_roledao');
 var sha256 = require('sha256');
 const jwt = require('jsonwebtoken');
 
-/**create role by admin only */
+
+/**
+ * @swagger
+ * /roles:
+ *  post:
+ *    description: Protected. Create role by admin only 
+ *    parameters:
+ *    - name: user_id
+ *      description: User's id
+ *      in: body
+ *      required: true
+ *      type: integer
+ *      value: "33"
+ *    - name: role_id
+ *      description: Role id
+ *      in: body
+ *      required: true
+ *      type: integer
+ *      value: "2"
+ *    responses:
+ *      200:
+ *        description : OK
+ *      500:
+ *        description : Internal Server error
+ */
 router.post("/", async(req, res, next)=>{
-    // we receive pwd hashed and hash it one more time
     const authHeader = req.headers['authorization'];
     let token = authHeader && authHeader.split('_')[1];
     var decoded = jwt.decode(token, {complete: true}).payload;
@@ -33,8 +56,31 @@ router.post("/", async(req, res, next)=>{
     }
 });
 
+/**
+ * @swagger
+ * /roles:
+ *  delete:
+ *    description: Protected. Delete role by admin only 
+ *    parameters:
+ *    - name: user_id
+ *      description: User's id
+ *      in: body
+ *      required: true
+ *      type: integer
+ *      value: "33"
+ *    - name: role_id
+ *      description: Role id
+ *      in: body
+ *      required: true
+ *      type: integer
+ *      value: "2"
+ *    responses:
+ *      200:
+ *        description : OK
+ *      500:
+ *        description : Internal Server error
+ */
 router.delete("/", async(req, res, next)=>{
-    // we receive pwd hashed and hash it one more time
     const authHeader = req.headers['authorization'];
     let token = authHeader && authHeader.split('_')[1];
     var decoded = jwt.decode(token, {complete: true}).payload;

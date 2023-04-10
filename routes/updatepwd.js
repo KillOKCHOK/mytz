@@ -5,7 +5,30 @@ var  user_roledao = require('../db/user_roledao');
 var sha256 = require('sha256');
 const jwt = require('jsonwebtoken');
 
-/* Update pwd user or admin. */
+/**
+ * @swagger
+ * /changepassword:
+ *  post:
+ *    description: Protected. Update pwd. Authorized user or admin only.
+ *    parameters:
+ *    - name: email
+ *      description: User's email
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: kitty@mail.com
+ *    - name: password
+ *      description: User's pwd
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: root
+ *    responses:
+ *      200:
+ *        description : OK
+ *      500:
+ *        description : Internal Server error
+ */
 router.post("/", async(req, res, next)=>{
     // we receive pwd hashed and hash it one more time
     let { email, password } = req.body;

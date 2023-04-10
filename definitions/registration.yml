@@ -1,0 +1,11 @@
+definitions:
+  registration:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    # Both properties are required
+    required:  
+      - email
+      - password

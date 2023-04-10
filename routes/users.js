@@ -6,7 +6,17 @@ const jwt = require('jsonwebtoken');
 var  usersinfodao = require('../db/usersinfodao');
 var db = require('../db/pgconnection');
 
-/* GET users listing. */
+/**
+ * @swagger
+ * /users:
+ *  get:
+ *    description: Protected. Get users list according to role from JWT. If role Admin you can fetch all users. If role Boss, only your employees and their subordinates, if USER, only yourself.
+ *    responses:
+ *      200:
+ *        description : return new user ID
+ *      500:
+ *        description : Internal Server error
+ */
 router.get('/', function(req, res, next) {
   const authHeader = req.headers['authorization'];
   let token = authHeader && authHeader.substring(7,authHeader.length);

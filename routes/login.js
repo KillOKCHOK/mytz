@@ -5,7 +5,31 @@ var  user_roledao = require('../db/user_roledao');
 var sha256 = require('sha256');
 const jwt = require("jsonwebtoken");
 
-/* login user return jwt with credentials */
+
+/**
+ * @swagger
+ * /login:
+ *  post:
+ *    description: Login user
+ *    parameters:
+ *    - name: login
+ *      description: User's login/email
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: kitty@mail.com
+ *    - name: password
+ *      description: User's pwd
+ *      in: body
+ *      required: true
+ *      type: string
+ *      value: root
+ *    responses:
+ *      200:
+ *        description : return new user ID
+ *      500:
+ *        description : Internal Server error
+ */
 router.post("/", async(req, res, next)=>{
     let { login, password } = req.body;
     let user = {};
