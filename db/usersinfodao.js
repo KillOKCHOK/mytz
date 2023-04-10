@@ -37,7 +37,7 @@ exports.removeUserInfo = async function (id) {
     });
   };
 
-  // DAO method to check roles by user id
+  // DAO method to check users by user id
 exports.getUserByLoginId = async function (id) {
   return new Promise(function(resolve, reject){
     db.query('SELECT * from public.users WHERE login_id=$1',[id], (error, results) => {
@@ -48,7 +48,7 @@ exports.getUserByLoginId = async function (id) {
     });
   });
 };
-  // DAO method to check roles by user id
+  // DAO method to check users by user id
 exports.getUserById = async function (id) {
   return new Promise(function(resolve, reject){
     db.query('SELECT * from public.users WHERE id=$1',[id], (error, results) => {
@@ -59,7 +59,7 @@ exports.getUserById = async function (id) {
     });
   });
 };
-  // DAO method to check roles by user id
+  // DAO method to check users by user id asynchronously
 exports.getUserByIdAsynch = async function (id) {
   return await db.query('SELECT * FROM public.users WHERE manager_id = $1', [id]);
 };

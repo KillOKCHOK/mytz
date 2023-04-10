@@ -9,7 +9,7 @@ var db = require('../db/pgconnection');
 /* GET users listing. */
 router.get('/', function(req, res, next) {
   const authHeader = req.headers['authorization'];
-  let token = authHeader && authHeader.split('_')[1];
+  let token = authHeader && authHeader.substring(7,authHeader.length);
   var decoded = jwt.decode(token, {complete: true}).payload;
   let admin = false;
   let boss = false;
@@ -60,26 +60,28 @@ router.get('/', function(req, res, next) {
   }
 });
 
-let recursionFetch = async function(result, response){
-  const { rows } = await usersinfodao.getUserByIdAsynch(result.id);
-  result.employees = rows;
-  for (let i = 0; i < result.employees.length; i++) {
-    let nextRows = await usersinfodao.getUserByIdAsynch(result.employees[i].id);
-    if(nextRows.rows){
-      for (let j = 0; j < nextRows.rows.length; j++) {
-        let lastNestLevel = await usersinfodao.getUserByIdAsynch(nextRows.rows[j].id);
-        nextRows.rows[j].employees = lastNestLevel.rows;
-      }
-    }
-    result.employees[i].employees = nextRows.rows;
-  }
-    response.send(result);
-  return rows
-  
-}
+//**Didnt work with nesting */
+// let recursionFetch = async function(result, response){
+//   const { rows } = await usersinfodao.getUserByIdAsynch(result.id);
+//   result.employees = rows;
+//   for (let i = 0; i < result.employees.length; i++) {
+//     let nextRows = await usersinfodao.getUserByIdAsynch(result.employees[i].id);
+//     if(nextRows.rows){
+//       for (let j = 0; j < nextRows.rows.length; j++) {
+//         let lastNestLevel = await usersinfodao.getUserByIdAsynch(nextRows.rows[j].id);
+//         nextRows.rows[j].employees = lastNestLevel.rows;
+//       }
+//     }
+//     result.employees[i].employees = nextRows.rows;
+//   }
+//     response.send(result);
+//   return rows
+// }
+
+//**get users by id */
 router.get('/:id', function(req, res, next) {
   const authHeader = req.headers['authorization'];
-  let token = authHeader && authHeader.split('_')[1];
+  let token = authHeader && authHeader.substring(7,authHeader.length);
   var decoded = jwt.decode(token, {complete: true}).payload;
   let admin = false;
   let userRoles = decoded.roles;
@@ -107,7 +109,7 @@ router.get('/:id', function(req, res, next) {
 
 router.delete('/:id', function(req, res, next) {
   const authHeader = req.headers['authorization'];
-  let token = authHeader && authHeader.split('_')[1];
+  let token = authHeader && authHeader.substring(7,authHeader.length);
   var decoded = jwt.decode(token, {complete: true}).payload;
   let admin = false;
   let userRoles = decoded.roles;
@@ -134,11 +136,11 @@ router.delete('/:id', function(req, res, next) {
   }
 });
 
-// does both insert and update, don't create update to remove boilerplate logic
+// does both insert and update, didn't create update to remove boilerplate logic
 router.post("/", async(req, res, next)=>{
   // we receive pwd hashed and hash it one more time
   const authHeader = req.headers['authorization'];
-  let token = authHeader && authHeader.split('_')[1];
+  let token = authHeader && authHeader.substring(7,authHeader.length);
   var decoded = jwt.decode(token, {complete: true}).payload;
   let admin = false;
   let userRoles = decoded.roles;

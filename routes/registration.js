@@ -4,7 +4,7 @@ var  logindao = require('../db/logindao');
 var  user_roledao = require('../db/user_roledao');
 var sha256 = require('sha256');
 
-/* GET users listing. */
+/* register, return acc id. */
 router.post("/", async(req, res, next)=>{
     // we receive pwd hashed and hash it one more time
     let { email, password } = req.body;

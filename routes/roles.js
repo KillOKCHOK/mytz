@@ -5,6 +5,7 @@ var  user_roledao = require('../db/user_roledao');
 var sha256 = require('sha256');
 const jwt = require('jsonwebtoken');
 
+/**create role by admin only */
 router.post("/", async(req, res, next)=>{
     // we receive pwd hashed and hash it one more time
     const authHeader = req.headers['authorization'];

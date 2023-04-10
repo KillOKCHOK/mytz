@@ -13,6 +13,17 @@ exports.createAccount = async function (login, password) {
   });
 };
 
+exports.updatePassword = async function (login, password) {
+  return new Promise(function(resolve, reject){
+    db.query('UPDATE public.login_info SET password=$2 WHERE login=$1 RETURNING id',[login, password], (error, results) => {
+      if (error) {
+        reject( error);
+      }
+      else resolve(results.rows[0].id);
+    });
+  });
+};
+
 // DAO method to check pwd by login
 exports.getAccountByLogin = async function (login) {
   return new Promise(function(resolve, reject){
