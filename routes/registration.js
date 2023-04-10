@@ -6,7 +6,6 @@ var sha256 = require('sha256');
 
 /* register, return acc id. */
 router.post("/", async(req, res, next)=>{
-    // we receive pwd hashed and hash it one more time
     let { email, password } = req.body;
     console.log("email");
     console.log(req.body);

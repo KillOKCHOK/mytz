@@ -148,7 +148,6 @@ router.delete('/:id', function(req, res, next) {
 
 // does both insert and update, didn't create update to remove boilerplate logic
 router.post("/", async(req, res, next)=>{
-  // we receive pwd hashed and hash it one more time
   const authHeader = req.headers['authorization'];
   let token = authHeader && authHeader.substring(7,authHeader.length);
   var decoded = jwt.decode(token, {complete: true}).payload;
