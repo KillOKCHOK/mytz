@@ -27,11 +27,16 @@ exports.updatePassword = async function (login, password) {
 // DAO method to check pwd by login
 exports.getAccountByLogin = async function (login) {
   return new Promise(function(resolve, reject){
+    console.log(db);
     db.query('SELECT * from public.login_info WHERE login=$1',[login], (error, results) => {
       if (error) {
         reject( error)
       }
-      resolve(results.rows);
+      try {
+        resolve(results.rows);
+      } catch (error) {
+        reject( error)
+      }
     });
   });
 };
