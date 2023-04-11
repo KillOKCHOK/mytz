@@ -46,10 +46,11 @@ router.get('/', function(req, res, next) {
     // console.log("BOSS");
     // res.send("BOSS");
     let response = {};
+    console.log(decoded);
     usersinfodao.getUserByLoginId(decoded.userId).then(async response=>{
       if(response[0]){
         // get users
-        await recursionFetch(response[0], res)
+        await bossFetch(response[0], res)
         // res.send(response[0]);
       }else{
         console.log("users route, was not able to find user by login id in if boss statement");
@@ -70,23 +71,23 @@ router.get('/', function(req, res, next) {
   }
 });
 
-//**Didnt work with nesting */
-// let recursionFetch = async function(result, response){
-//   const { rows } = await usersinfodao.getUserByIdAsynch(result.id);
-//   result.employees = rows;
-//   for (let i = 0; i < result.employees.length; i++) {
-//     let nextRows = await usersinfodao.getUserByIdAsynch(result.employees[i].id);
-//     if(nextRows.rows){
-//       for (let j = 0; j < nextRows.rows.length; j++) {
-//         let lastNestLevel = await usersinfodao.getUserByIdAsynch(nextRows.rows[j].id);
-//         nextRows.rows[j].employees = lastNestLevel.rows;
-//       }
-//     }
-//     result.employees[i].employees = nextRows.rows;
-//   }
-//     response.send(result);
-//   return rows
-// }
+
+let bossFetch = async function(result, response){
+  const { rows } = await usersinfodao.getUserByIdAsynch(result.id);
+  result.employees = rows;
+  for (let i = 0; i < result.employees.length; i++) {
+    let nextRows = await usersinfodao.getUserByIdAsynch(result.employees[i].id);
+    if(nextRows.rows){
+      for (let j = 0; j < nextRows.rows.length; j++) {
+        let lastNestLevel = await usersinfodao.getUserByIdAsynch(nextRows.rows[j].id);
+        nextRows.rows[j].employees = lastNestLevel.rows;
+      }
+    }
+    result.employees[i].employees = nextRows.rows;
+  }
+    response.send(result);
+  return rows
+}
 
 //**get users by id */
 router.get('/:id', function(req, res, next) {
